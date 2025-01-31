@@ -31,6 +31,7 @@ spec:
       secretName: {{ .secretName }}
     {{- end }}
   {{- end }}
+  {{- if .Values.kong.ingress.hosts }}
   rules:
     {{- range .Values.kong.ingress.hosts }}
     - host: {{ .host | quote }}
@@ -53,5 +54,12 @@ spec:
               {{- end }}
           {{- end }}
     {{- end }}
+  {{- else }}
+  defaultBackend:
+    service:
+      name: {{ $fullName }}
+      port:
+        number: {{ $svcPort }}
+  {{- end }}
 {{- end }}
 {{- end }}

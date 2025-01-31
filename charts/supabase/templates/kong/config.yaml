@@ -48,6 +48,18 @@ data:
         password: ${DASHBOARD_PASSWORD}
     {{- end }}
     services:
+      - name: ping-service
+        url: http://localhost
+        routes:
+          - name: ping-route
+            strip_path: true
+            paths:
+              - /ping
+        plugins:
+          - name: request-termination
+            config:
+              status_code: 200
+              body: "pong"
     {{- if .Values.auth.enabled }}
       - name: auth-v1-open
         url: http://{{ include "supabase.auth.fullname" . }}:{{ .Values.auth.service.port }}/verify
